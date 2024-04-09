@@ -21,4 +21,4 @@ Make sure to have docker installed.
 
 localhost:4200 is now unreachable.
 
-To see a working workaround, checkout the "fix" branch, build & run the docker image again.
+To see a working workaround, checkout the "fix" branch, run pnpm install - build & run the docker image again.
