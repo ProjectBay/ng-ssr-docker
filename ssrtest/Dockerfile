@@ -29,4 +29,4 @@ RUN mkdir -p node_modules/.cache && chmod -R 777 node_modules/.cache
 RUN pnpm run build --configuration=development
 
 EXPOSE 4200
-CMD ["pnpm", "run", "start"]
+CMD ["npx", "ng", "run", "ssrtest:serve-ssr"]

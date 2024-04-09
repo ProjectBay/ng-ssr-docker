@@ -1,27 +1,89 @@
-# Ssrtest
+1.  add new targets
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.0.
+```json
+"server": {
+    "builder": "@angular-devkit/build-angular:server",
+    "options": {
+    "outputPath": "dist/server",
+    "main": "server.ts",
+    "tsConfig": "tsconfig.server.json"
+    },
+    "configurations": {
+    "production": {
+        "outputHashing": "media"
+    },
+    "development": {
+        "buildOptimizer": false,
+        "optimization": false,
+        "sourceMap": true,
+        "extractLicenses": false,
+        "vendorChunk": true
+    }
+    },
+    "defaultConfiguration": "production"
+},
+"serve-ssr": {
+    "builder": "@angular-devkit/build-angular:ssr-dev-server",
+    "configurations": {
+    "development": {
+        "browserTarget": "{{projectName}}:build:development",
+        "serverTarget": "{{projectName}}:server:development"
+    },
+    "production": {
+        "browserTarget": "{{projectName}}:build:production",
+        "serverTarget": "{{projectName}}:server:production"
+    }
+    },
+    "defaultConfiguration": "development"
+}
+```
 
-## Development server
+2. run `npx install browser-sync --save-dev`
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+3. add tsconfig.server.ts
 
-## Code scaffolding
+```json
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "outDir": "../../out-tsc/server",
+    "target": "es2019",
+    "types": ["node"]
+  },
+  "files": ["src/main.server.ts", "server.ts"]
+}
+```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+4. In server.ts replace:
 
-## Build
+```typescript
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+11  const serverDistFolder = dirname(fileURLToPath(import.meta.url));
+12  const browserDistFolder = resolve(serverDistFolder, '../browser');
+13  const indexHtml = join(serverDistFolder, 'index.server.html');
+```
 
-## Running unit tests
+with
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```typescript
+11  const distFolder = join(process.cwd(), 'dist/{{projectname}}/browser');
+12  const indexHtml = existsSync(join(distFolder, 'index.original.html'))
+13    ? join(distFolder, 'index.original.html')
+14    : join(distFolder, 'index.html');
+```
 
-## Running end-to-end tests
+then:
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+- `server.set('views', browserDistFolder);` with `server.set('views', distFolder);`
+- `express.static(browserDistFolder, {` with `express.static(distFolder, {`
+- `documentFilePath: browserDistFolder,` with ` documentFilePath: indexHtml,`
+- `publicPath: browserDistFolder,` with `publicPath: distFolder,`
 
-## Further help
+then:
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+add `import 'zone.js/node';` as an import in the first line
+
+5. Now you can run ```npx ng run {{projectName}}:serve-ssr
+
+Docker now exposes the ports
