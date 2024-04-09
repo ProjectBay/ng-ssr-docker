@@ -1,27 +1,24 @@
-# Ssrtest
+# Angular Docker SSR V17 Issue
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.0.
+Hello.
 
-## Development server
+This repository displays an angular ssr docker issue.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+When trying to run npx run start inside docker to serve the angular ssr app, docker can't expose the ports. Therefore the application will be unavailable.
 
-## Code scaffolding
+The workaround for this issue is documented inside the README of the "fix" branch of this repository.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## How to test the issue
 
-## Build
+- Node: 18.14.0
+- Package Manager: PNPM (not tested with other pm's)
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Make sure to have docker installed.
 
-## Running unit tests
+1. `pnpm install`
+2. `pnpm run docker-build`
+3. `pnpm run docker-run`
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+localhost:4200 is now unreachable.
 
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+To see a working workaround, checkout the "fix" branch, build & run the docker image again.
