@@ -1,0 +1,19 @@
+# Versioning and metadata
+.git
+.gitignore
+.dockerignore
+.angular
+.nx
+
+# Build dependencies
+dist.do
+node_modules
+
+# Environment
+.env
+
+# Misc
+.eslintrc.json
+.prettierrc
+.prettierignore
+README.md
