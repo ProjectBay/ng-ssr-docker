@@ -1,2 +1,3 @@
 # ng-ssr-docker
-Repo for showcasing angular ssr docker bug
+
+see ./ssrtest/README.md
